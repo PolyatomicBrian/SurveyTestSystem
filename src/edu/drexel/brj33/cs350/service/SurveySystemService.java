@@ -12,11 +12,11 @@ public class SurveySystemService {
 
     public void doMenu(){
 
-        //If user picks Survey
+        // If user picks Survey
         SurveyService surveyService = new SurveyService(this.ioHandler);
         surveyService.doMenu();
 
-        //If user picks Test
+        // If user picks Test
         surveyService  = new TestService(this.ioHandler);
         surveyService.doMenu();
 

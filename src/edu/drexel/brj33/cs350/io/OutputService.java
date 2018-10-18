@@ -2,15 +2,15 @@ package edu.drexel.brj33.cs350.io;
 
 import java.io.OutputStream;
 
-public class OutputFormatter {
+public class OutputService {
 
+    OutputStream os;
 
-
-    OutputFormatter(OutputStream os){
+    OutputService(OutputStream os){
         this.os = os;
     }
 
-    public void writeHeader(String header){
+    public void writeTitle(String header){
 
     }
 

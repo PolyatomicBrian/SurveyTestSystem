@@ -9,13 +9,19 @@ import java.io.OutputStream;
 
 public class IOHandler {
 
-    private InputStream is;
-    private OutputFormatter of;
+    private InputService is;
+    private OutputService os;
 
     public IOHandler(OutputStream os, InputStream is){
-        this.os = os;
-        this.of = new OutputFormatter(os);
-        this.is = is;
+        this.os = new OutputService(os);
+        this.is = new InputService(is, this.os);
+    }
+
+    public void setUpQuestion(Question q){
+        int num = is.getNumberFromUser("Enter number of responses.");
+        q.setNumberResponses(num);
+        q.getPrompt().configureWithInput(this.is);
+
     }
 
 
