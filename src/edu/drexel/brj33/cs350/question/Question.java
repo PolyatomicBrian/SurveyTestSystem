@@ -1,5 +1,6 @@
 package edu.drexel.brj33.cs350.question;
 
+import edu.drexel.brj33.cs350.service.IOService;
 import edu.drexel.brj33.cs350.prompt.Prompt;
 import edu.drexel.brj33.cs350.response.Response;
 
@@ -19,23 +20,47 @@ public abstract class Question implements Serializable {
     }
 
     public void submitResponse(Response resp) throws Exception {
-        // Called by ConsoleHandler after user responds to a question.
+        // Called after user responds to a question.
         // Throws an Exception when a response is Invalid.
         validateResponse(resp);
         this.responses.add(formatResponse(resp));
+    }
+
+    //Lifecycle
+    // make setup display take
+
+    public void setup(IOService ioService){
+        this.getPrompt().setup(ioService);
+    }
+
+    public void display(IOService ioService){
+        this.getPrompt().display(ioService);
     }
 
     protected abstract void validateResponse(Response resp) throws Exception;
 
     protected abstract Response formatResponse(Response resp);
 
-    public abstract Prompt getPrompt();
+    protected abstract Prompt getPrompt();
 
-    public int getNumberResponses(){
+    protected int getNumberResponses(){
         return this.numResponses;
     }
 
-    public void setNumberResponses(int num){
+    protected void setNumberResponses(int num){
         this.numResponses = num;
+    }
+
+    public void take(IOService ioService){
+        this.display(ioService);
+        {
+            try {
+                String userInputResponse = ioService.getStringFromUser("> ");
+                this.submitResponse(new Response(userInputResponse));
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+        }
     }
 }

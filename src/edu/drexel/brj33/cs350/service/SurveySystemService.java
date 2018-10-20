@@ -1,24 +1,30 @@
 package edu.drexel.brj33.cs350.service;
 
-import edu.drexel.brj33.cs350.io.IOHandler;
+import edu.drexel.brj33.cs350.menu.Menu;
 
 public class SurveySystemService {
 
-    private IOHandler ioHandler;
+    private IOService ioService;
 
-    public SurveySystemService(IOHandler ioHandler){
-        this.ioHandler = ioHandler;
+    public SurveySystemService(IOService ioService){
+        this.ioService = ioService;
     }
 
     public void doMenu(){
-
-        // If user picks Survey
-        SurveyService surveyService = new SurveyService(this.ioHandler);
-        surveyService.doMenu();
-
-        // If user picks Test
-        surveyService  = new TestService(this.ioHandler);
-        surveyService.doMenu();
-
+        Menu m = new Menu(this);
+        m.addMenuOptionValue("SurveyMode", "doSurveyMode");
+        m.addMenuOptionValue("TestMode", "doTestMode");
+        m.handleMenu(this.ioService);
     }
+
+    public void doSurveyMode(){
+        SurveyService surveyService = new SurveyService(ioService);
+        surveyService.doMenu();
+    }
+
+    public void doTestMode(){
+        TestService testService = new TestService(ioService);
+        testService.doMenu();
+    }
+
 }

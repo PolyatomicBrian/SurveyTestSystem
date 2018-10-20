@@ -1,7 +1,6 @@
 package edu.drexel.brj33.cs350.prompt;
 
-import edu.drexel.brj33.cs350.io.InputService;
-import edu.drexel.brj33.cs350.io.OutputService;
+import edu.drexel.brj33.cs350.service.IOService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +22,13 @@ public class ColumnOptionsPrompt extends Prompt {
         return optionsColumns.get(i);
     }
 
-    public void formatForOutput(OutputService of){
-        super.formatForOutput(of);
-        of.writeContent("ello");
+    public void display(IOService ioService){
+        super.display(ioService);
     }
 
-    public void configureWithInput(InputService is){
-        super.configureWithInput(is);
-        is.getNumberFromUser("Enter number of options.");
+    public void setup(IOService ioService){
+        super.setup(ioService);
+        ioService.getNumberFromUser("Enter number of options.");
     }
 
 }

@@ -7,4 +7,8 @@ import java.util.Set;
 
 public class Test extends Survey {
     private List<Set<Response>> correctAnswers;
+
+    public String getFileExtension(){
+        return "test";
+    }
 }

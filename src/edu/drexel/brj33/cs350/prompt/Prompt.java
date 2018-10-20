@@ -1,7 +1,6 @@
 package edu.drexel.brj33.cs350.prompt;
 
-import edu.drexel.brj33.cs350.io.InputService;
-import edu.drexel.brj33.cs350.io.OutputService;
+import edu.drexel.brj33.cs350.service.IOService;
 
 public class Prompt {
 
@@ -19,11 +18,11 @@ public class Prompt {
         this.promptText = promptText;
     }
 
-    public void formatForOutput(OutputService of){
-        of.writeTitle(this.getPromptText());
+    public void display(IOService ioService){
+        ioService.writeTitle(this.getPromptText());
     }
 
-    public void configureWithInput(InputService is){
+    public void setup(IOService is){
         String p = is.getStringFromUser("Enter a prompt for the question.");
         this.promptText = p;
     }
