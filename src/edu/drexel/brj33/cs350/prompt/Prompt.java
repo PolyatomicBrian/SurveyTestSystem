@@ -26,4 +26,8 @@ public class Prompt {
         String p = is.getStringFromUser("Enter a prompt for the question.");
         this.promptText = p;
     }
+
+    public void edit(IOService ioService){
+
+    }
 }

@@ -26,9 +26,6 @@ public abstract class Question implements Serializable {
         this.responses.add(formatResponse(resp));
     }
 
-    //Lifecycle
-    // make setup display take
-
     public void setup(IOService ioService){
         this.getPrompt().setup(ioService);
     }
@@ -62,5 +59,9 @@ public abstract class Question implements Serializable {
 
             }
         }
+    }
+
+    public void edit(IOService ioService){
+
     }
 }

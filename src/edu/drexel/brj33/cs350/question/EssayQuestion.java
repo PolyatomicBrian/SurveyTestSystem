@@ -8,7 +8,7 @@ public class EssayQuestion extends Question {
     private Prompt prompt;
 
     public EssayQuestion(){
-        prompt = new Prompt();
+        this.prompt = new Prompt();
     }
 
     @Override
@@ -22,7 +22,7 @@ public class EssayQuestion extends Question {
     }
 
     @Override
-    public Prompt getPrompt() {
+    protected Prompt getPrompt() {
         return this.prompt;
     }
 }

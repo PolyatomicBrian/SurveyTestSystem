@@ -24,7 +24,7 @@ public class MultipleChoiceQuestion extends Question {
     }
 
     @Override
-    public Prompt getPrompt() {
+    protected Prompt getPrompt() {
         return this.prompt;
     }
 }

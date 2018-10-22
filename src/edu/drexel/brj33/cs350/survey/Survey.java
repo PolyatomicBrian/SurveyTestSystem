@@ -33,7 +33,7 @@ public class Survey implements SerializingInterface {
     }
 
     public String getFileName(){
-        return getSurveyName() + "." + getFileExtension();
+        return getSurveyName() + "." + fileExtension;
     }
 
     public void display(IOService ioService) {
@@ -48,10 +48,18 @@ public class Survey implements SerializingInterface {
         }
     }
 
-    public String getFileExtension(){
-        return "survey";
+    public void edit(IOService ioService){
+
     }
 
+    public void addQuestion(IOService ioService){
 
+    }
+
+    public Survey deepCopy(Survey s){
+        // Returns a deep copy of the survey.
+        // To be used to serialize a survey containing responses.
+        return null;
+    }
 
 }

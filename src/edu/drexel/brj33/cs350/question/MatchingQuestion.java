@@ -24,7 +24,7 @@ public class MatchingQuestion extends Question {
     }
 
     @Override
-    public Prompt getPrompt() {
+    protected Prompt getPrompt() {
         return this.prompt;
     }
 }
