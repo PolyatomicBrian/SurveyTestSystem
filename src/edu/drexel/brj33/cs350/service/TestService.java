@@ -10,7 +10,7 @@ public class TestService extends SurveyService {
 
     protected Menu getMenu(){
         Menu m = super.getMenu();
-        m.addMenuOptionValue("Grade", "doGrade");
+        //m.addMenuOptionValue("Grade", "doGrade");
         return m;
     }
 

@@ -23,6 +23,6 @@ public class ShortAnswerQuestion extends Question {
 
     @Override
     protected Prompt getPrompt() {
-        return null;
+        return this.prompt;
     }
 }

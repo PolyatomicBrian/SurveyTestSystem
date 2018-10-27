@@ -1,8 +1,11 @@
 package edu.drexel.brj33.cs350.prompt;
 
 import edu.drexel.brj33.cs350.service.IOService;
+import edu.drexel.brj33.cs350.service.SerializingInterface;
 
-public class Prompt {
+import java.io.Serializable;
+
+public class Prompt implements Serializable {
 
     private String promptText;
 

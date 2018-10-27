@@ -3,6 +3,8 @@ package edu.drexel.brj33.cs350.service;
 import edu.drexel.brj33.cs350.menu.Menu;
 import edu.drexel.brj33.cs350.survey.Survey;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SurveyService {
@@ -12,6 +14,7 @@ public class SurveyService {
 
     public SurveyService(IOService ioService) {
         this.ioService = ioService;
+        this.loadedSurveys = new ArrayList<>();
     }
 
     public void doMenu(){
@@ -21,17 +24,20 @@ public class SurveyService {
     protected Menu getMenu() {
         Menu m = new Menu(this);
         m.addMenuOptionValue("Create", "doCreate");
-        m.addMenuOptionValue("Take", "doTake");
-        m.addMenuOptionValue("Edit", "doEdit");
+        // Lines commented out are TODO.
+        //m.addMenuOptionValue("Take", "doTake");
+        //m.addMenuOptionValue("Edit", "doEdit");
         m.addMenuOptionValue("Display", "doDisplay");
         m.addMenuOptionValue("Load", "doLoad");
         m.addMenuOptionValue("Save", "doSave");
-        m.addMenuOptionValue("Tabulate", "doTabulate");
+        //m.addMenuOptionValue("Tabulate", "doTabulate");
         return m;
     }
 
     public void doCreate(){
-
+        Survey survey = new Survey();
+        survey.setup(ioService);
+        this.loadedSurveys.add(survey);
     }
 
     public void doTake(){
@@ -50,7 +56,7 @@ public class SurveyService {
 
     }
 
-    public void doSave(){
+    public void doSave() throws IOException {
         Survey surveyToSave = getUserSelectedSurvey();
         SerializingService<Survey> serializingService = new SerializingService<>();
         String fileName = surveyToSave.getFileName();

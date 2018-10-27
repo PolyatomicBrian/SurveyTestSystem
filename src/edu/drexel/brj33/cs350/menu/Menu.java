@@ -1,6 +1,5 @@
 package edu.drexel.brj33.cs350.menu;
 
-
 import edu.drexel.brj33.cs350.service.IOService;
 
 import java.lang.reflect.Method;
@@ -16,6 +15,7 @@ public class Menu {
      */
     private List<String> optionMethods;
     private List<String> optionValues;
+    private List<MenuAction> optionActions;
 
     private Object service;
 
@@ -23,30 +23,48 @@ public class Menu {
         this.service = service;
         this.optionMethods = new ArrayList<>();
         this.optionValues = new ArrayList<>();
+        this.optionActions = new ArrayList<>();
     }
 
+    // Uses Reflection.
     public void addMenuOptionValue(String optionValue, String optionMethod){
         this.optionMethods.add(optionMethod);
         this.optionValues.add(optionValue);
+        this.optionActions.add(null);
+    }
+
+    // Uses Lambda functions.
+    public void addMenuOptionAction(String optionValue, MenuAction optionAction){
+        this.optionValues.add(optionValue);
+        this.optionActions.add(optionAction);
+        this.optionMethods.add(null);
     }
 
     public void handleMenu(IOService ioService){
-        this.addMenuOptionValue("Quit", "doQuit");
-        // Get index corresponding to a value displayed.
-        // This will be used as an index for getting the associated method.
-        int userChoice = ioService.getChoiceFromUser(optionValues);
-        try {
-            // Using Reflection, call the method associated with the selected
-            // value.
-            Class serviceClass = service.getClass();
-            Method m = serviceClass.getMethod(optionMethods.get(userChoice));
-            m.invoke(service);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        this.addMenuOptionValue("Quit", null);
+        boolean cont = true;
+        while (cont) {
+            // Get index corresponding to a value displayed.
+            // This will be used as an index for getting the associated method.
+            int userChoice = ioService.getChoiceFromUser(optionValues);
+            try {
+                String method = optionMethods.get(userChoice);
+                MenuAction action = optionActions.get(userChoice);
+                if (action == null && method != null) {
+                    // Using Reflection, call the method associated with the selected
+                    // value.
+                    Class serviceClass = service.getClass();
+                    Method m = serviceClass.getMethod(optionMethods.get(userChoice));
+                    m.invoke(service);
+                } else if (method == null && action != null){
+                    // Perform the action, ie execute the Lambda expression.
+                    action.action();
+                } else {
+                    cont = false;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
-
-
-
-
 }

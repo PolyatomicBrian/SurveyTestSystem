@@ -15,7 +15,7 @@ public class IOService {
     }
 
     public void writeTitle(String header){
-
+        writeContent(header);
     }
 
     public void writeContent(String line){

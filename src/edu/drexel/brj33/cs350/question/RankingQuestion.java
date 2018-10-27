@@ -24,6 +24,6 @@ public class RankingQuestion extends Question {
 
     @Override
     protected Prompt getPrompt() {
-        return null;
+        return this.prompt;
     }
 }
