@@ -1,6 +1,8 @@
 package edu.drexel.brj33.cs350.service;
 
 import edu.drexel.brj33.cs350.menu.Menu;
+import edu.drexel.brj33.cs350.survey.Survey;
+import edu.drexel.brj33.cs350.survey.Test;
 
 public class TestService extends SurveyService {
 
@@ -14,8 +16,18 @@ public class TestService extends SurveyService {
         return m;
     }
 
+    public void doCreate(){
+        Survey survey = new Test();
+        survey.setup(ioService);
+        this.loadedSurveys.add(survey);
+    }
+
     public void doGrade(){
 
+    }
+
+    protected String getFileExtension(){
+        return ".test";
     }
 
 }

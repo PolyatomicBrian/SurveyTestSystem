@@ -19,8 +19,14 @@ public class IOService {
     }
 
     public void writeContent(String line){
+        writeContent(line, true);
+    }
+
+    public void writeContent(String line, boolean newLine){
         try {
-            line += "\n";
+            if (newLine) {
+                line += "\n";
+            }
             os.write(line.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
@@ -28,7 +34,12 @@ public class IOService {
     }
 
     public String getStringFromUser(String description){
-        this.writeContent(description);
+        if (description == null){
+            description = "> ";
+        }else{
+            description += "\n> ";
+        }
+        this.writeContent(description, false);
         String s = null;
         while (s == null){
             try {
@@ -44,14 +55,19 @@ public class IOService {
     }
 
     public int getNumberFromUser(String description) {
-        this.writeContent(description);
+        if (description == null){
+            description = "> ";
+        }else{
+            description += "\n> ";
+        }
         Integer userNumber = null;
         while (userNumber == null) {
             try {
+                this.writeContent(description, false);
                 String userInput = br.readLine();
                 userNumber = Integer.valueOf(userInput);
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         return userNumber;
@@ -59,11 +75,14 @@ public class IOService {
 
     public int getChoiceFromUser(List<? extends Object> choices){
         Integer ret = null;
+        if (choices.isEmpty()){
+            throw new RuntimeException("Choices for user to select from is empty!");
+        }
         while (ret == null) {
             for (int i = 0; i < choices.size(); i++) {
                 this.writeContent((i + 1) + ") " + choices.get(i).toString());
             }
-            int selection = this.getNumberFromUser("Enter your selection: ");
+            int selection = this.getNumberFromUser("Enter your selection.");
             if (selection <= choices.size() && selection > 0) {
                 ret = selection - 1;
             }else{

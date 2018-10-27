@@ -10,7 +10,7 @@ import java.util.List;
 public class SurveyService {
 
     protected IOService ioService;
-    private List<Survey> loadedSurveys;
+    protected List<Survey> loadedSurveys;
 
     public SurveyService(IOService ioService) {
         this.ioService = ioService;
@@ -34,6 +34,10 @@ public class SurveyService {
         return m;
     }
 
+    protected String getFileExtension(){
+        return ".survey";
+    }
+
     public void doCreate(){
         Survey survey = new Survey();
         survey.setup(ioService);
@@ -52,14 +56,18 @@ public class SurveyService {
         this.getUserSelectedSurvey().display(ioService);
     }
 
-    public void doLoad(){
-
+    public void doLoad() throws IOException, ClassNotFoundException{
+        SerializingService<Survey> serializingService = new SerializingService<>();
+        List<String> files = serializingService.availableFiles(this.getFileExtension());
+        int numSelection = this.ioService.getChoiceFromUser(files);
+        Survey loadedSurvey = serializingService.deserialize(files.get(numSelection));
+        this.loadedSurveys.add(loadedSurvey);
     }
 
     public void doSave() throws IOException {
         Survey surveyToSave = getUserSelectedSurvey();
         SerializingService<Survey> serializingService = new SerializingService<>();
-        String fileName = surveyToSave.getFileName();
+        String fileName = surveyToSave.getSurveyName() + this.getFileExtension();
         serializingService.serialize(fileName, surveyToSave);
     }
 
@@ -68,6 +76,9 @@ public class SurveyService {
     }
 
     protected Survey getUserSelectedSurvey(){
+        if (this.loadedSurveys.isEmpty()){
+            throw new RuntimeException("There are no surveys loaded!");
+        }
         return this.loadedSurveys.get(ioService.getChoiceFromUser(loadedSurveys));
     }
 

@@ -3,6 +3,7 @@ package edu.drexel.brj33.cs350.question;
 import edu.drexel.brj33.cs350.prompt.ColumnOptionsPrompt;
 import edu.drexel.brj33.cs350.prompt.Prompt;
 import edu.drexel.brj33.cs350.response.Response;
+import edu.drexel.brj33.cs350.service.IOService;
 
 public class MatchingQuestion extends Question {
 
@@ -10,6 +11,10 @@ public class MatchingQuestion extends Question {
 
     public MatchingQuestion(){
         this.prompt = new ColumnOptionsPrompt(2);
+    }
+
+    public void setup(IOService ioService){
+        this.getPrompt().setup(ioService);
     }
 
     @Override
@@ -20,7 +25,7 @@ public class MatchingQuestion extends Question {
 
     @Override
     protected Response formatResponse(Response resp) {
-        return null;
+        return resp;
     }
 
     @Override

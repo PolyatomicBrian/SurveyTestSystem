@@ -1,7 +1,6 @@
 package edu.drexel.brj33.cs350.prompt;
 
 import edu.drexel.brj33.cs350.service.IOService;
-import edu.drexel.brj33.cs350.service.SerializingInterface;
 
 import java.io.Serializable;
 

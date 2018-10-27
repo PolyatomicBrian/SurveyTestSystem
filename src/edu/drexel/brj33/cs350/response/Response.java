@@ -1,6 +1,8 @@
 package edu.drexel.brj33.cs350.response;
 
-public class Response {
+import java.io.Serializable;
+
+public class Response implements Serializable {
 
     private String resp;
 
@@ -25,5 +27,9 @@ public class Response {
         }else{
             return false;
         }
+    }
+
+    public String toString(){
+        return this.resp;
     }
 }

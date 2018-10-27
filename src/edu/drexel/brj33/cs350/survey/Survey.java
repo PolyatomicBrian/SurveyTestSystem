@@ -3,15 +3,14 @@ package edu.drexel.brj33.cs350.survey;
 import edu.drexel.brj33.cs350.menu.Menu;
 import edu.drexel.brj33.cs350.question.*;
 import edu.drexel.brj33.cs350.service.IOService;
-import edu.drexel.brj33.cs350.service.SerializingInterface;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Survey implements SerializingInterface {
+public class Survey implements Serializable {
     private List<Question> questions;
     private String surveyName;
-    public static final String fileExtension = "survey";
 
     public Survey(){
         this.questions = new ArrayList<>();
@@ -56,10 +55,6 @@ public class Survey implements SerializingInterface {
         this.surveyName = surveyName;
     }
 
-    public String getFileName(){
-        return getSurveyName() + "." + fileExtension;
-    }
-
     public void display(IOService ioService) {
         for (Question q : this.questions){
             q.display(ioService);
@@ -81,14 +76,8 @@ public class Survey implements SerializingInterface {
         q.setup(ioService);
     }
 
-    public Survey deepCopy(Survey s){
-        // Returns a deep copy of the survey.
-        // To be used to serialize a survey containing responses.
-        return null;
-    }
-
     public String toString(){
-        return this.getFileName();
+        return this.getSurveyName();
     }
 
 }

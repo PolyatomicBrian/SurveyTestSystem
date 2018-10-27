@@ -41,7 +41,7 @@ public class Menu {
     }
 
     public void handleMenu(IOService ioService){
-        this.addMenuOptionValue("Quit", null);
+        this.addMenuOptionValue("Done", null);
         boolean cont = true;
         while (cont) {
             // Get index corresponding to a value displayed.
@@ -63,7 +63,8 @@ public class Menu {
                     cont = false;
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                //ioService.writeContent(e.getCause().getMessage());
             }
         }
     }

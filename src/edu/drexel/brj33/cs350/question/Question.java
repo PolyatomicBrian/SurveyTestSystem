@@ -13,10 +13,18 @@ public abstract class Question implements Serializable {
     // Using a Set to prevent duplicates and allow for unordered elements.
     protected Set<Response> responses;
 
-    private int numResponses = 0;
+    private int numResponses = 1;
 
     public Question(){
         this.responses = new HashSet<Response>();
+    }
+
+    public Set<Response> getResponses(){
+        return this.responses;
+    }
+
+    public void clearResponses(){
+        this.responses = new HashSet<>();
     }
 
     public void submitResponse(Response resp) throws Exception {
@@ -28,6 +36,7 @@ public abstract class Question implements Serializable {
 
     public void setup(IOService ioService){
         this.getPrompt().setup(ioService);
+        this.numResponses = ioService.getNumberFromUser("Enter number of allowed responses.");
     }
 
     public void display(IOService ioService){
@@ -44,19 +53,14 @@ public abstract class Question implements Serializable {
         return this.numResponses;
     }
 
-    protected void setNumberResponses(int num){
-        this.numResponses = num;
-    }
-
     public void take(IOService ioService){
         this.display(ioService);
-        {
+        while(this.responses.size() < this.getNumberResponses()){
             try {
-                String userInputResponse = ioService.getStringFromUser("> ");
+                String userInputResponse = ioService.getStringFromUser(null);
                 this.submitResponse(new Response(userInputResponse));
             } catch (Exception e) {
-                e.printStackTrace();
-
+                ioService.writeContent(e.getMessage());
             }
         }
     }

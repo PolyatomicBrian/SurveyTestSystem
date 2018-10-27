@@ -18,7 +18,7 @@ public class EssayQuestion extends Question {
 
     @Override
     protected Response formatResponse(Response resp) {
-        return null;
+        return resp;
     }
 
     @Override

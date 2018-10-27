@@ -14,13 +14,15 @@ public class MultipleChoiceQuestion extends Question {
 
     @Override
     protected void validateResponse(Response resp) throws Exception {
-        // Todo, make sure we throw an exception.
-        this.prompt.getColumn(0).contains(resp.getResponse());
+        boolean contains = this.prompt.getColumn(0).contains(resp.getResponse());
+        if (!contains){
+            throw new Exception("Selection not listed.");
+        }
     }
 
     @Override
     protected Response formatResponse(Response resp) {
-        return null;
+        return resp;
     }
 
     @Override

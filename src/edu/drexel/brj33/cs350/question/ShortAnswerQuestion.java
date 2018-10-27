@@ -18,7 +18,7 @@ public class ShortAnswerQuestion extends Question {
 
     @Override
     protected Response formatResponse(Response resp) {
-        return null;
+        return resp;
     }
 
     @Override
