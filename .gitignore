@@ -1,3 +1,5 @@
 .idea/
 out/
 CS350.iml
+*.test
+*.survey
