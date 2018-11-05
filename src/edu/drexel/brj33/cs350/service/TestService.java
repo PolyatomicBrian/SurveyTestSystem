@@ -23,7 +23,9 @@ public class TestService extends SurveyService {
     }
 
     public void doGrade(){
-
+        /**
+         * Todo, next homework.
+         */
     }
 
     protected String getFileExtension(){

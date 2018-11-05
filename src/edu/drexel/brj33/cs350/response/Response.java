@@ -14,10 +14,9 @@ public class Response implements Serializable {
         return resp;
     }
 
-
     /**
      * Used to compare a Response to another Response.
-     * Specifically, used to compare a correct answer to a user's response.
+     * Specifically, will be used to compare a correct answer to a user's response.
      */
     @Override
     public boolean equals(Object obj) {

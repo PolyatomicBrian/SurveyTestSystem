@@ -13,11 +13,15 @@ public class EssayQuestion extends Question {
 
     @Override
     protected void validateResponse(Response resp) throws Exception {
-
+        // Ensure inputted response is valid.
+        if (resp == null || resp.getResponse().isEmpty()){
+            throw new Exception("Invalid response!");
+        }
     }
 
     @Override
     protected Response formatResponse(Response resp) {
+        // Essays do not need to be formatted to adhere to how we display content.
         return resp;
     }
 

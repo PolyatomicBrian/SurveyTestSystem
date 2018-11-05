@@ -29,9 +29,12 @@ public class Test extends Survey {
     }
 
     public void display(IOService ioService){
-        super.display(ioService);
-        for (Set<Response> r : correctAnswers){
-            ioService.writeTitle(r.toString());
+        ioService.writeSeparator();
+        for (int i = 0; i < getQuestions().size(); i ++) {
+            ioService.writeContent("Question " + (i+1) + " of " + getQuestions().size(), true);
+            getQuestions().get(i).display(ioService);
+            ioService.writeContent("Correct Answer: " + correctAnswers.get(i).toString());
+            ioService.writeSeparator();
         }
     }
 

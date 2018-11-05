@@ -24,6 +24,7 @@ public class RankingQuestion extends Question {
 
     @Override
     protected Response formatResponse(Response resp) {
+        // Ranking Questions do not need to be formatted to adhere to how we display content.
         return resp;
     }
 
@@ -31,4 +32,5 @@ public class RankingQuestion extends Question {
     protected Prompt getPrompt() {
         return this.prompt;
     }
+
 }

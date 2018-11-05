@@ -24,7 +24,9 @@ public class SurveyService {
     protected Menu getMenu() {
         Menu m = new Menu(this);
         m.addMenuOptionValue("Create", "doCreate");
-        // Lines commented out are TODO.
+        /**
+         * Todo, commented values will be implemented in next homework.
+         */
         //m.addMenuOptionValue("Take", "doTake");
         //m.addMenuOptionValue("Edit", "doEdit");
         m.addMenuOptionValue("Display", "doDisplay");
@@ -49,7 +51,9 @@ public class SurveyService {
     }
 
     public void doEdit(){
-
+        /**
+         * Todo, next homework.
+         */
     }
 
     public void doDisplay(){
@@ -57,28 +61,39 @@ public class SurveyService {
     }
 
     public void doLoad() throws IOException, ClassNotFoundException{
+        // Create service used for serializing and deserializing.
         SerializingService<Survey> serializingService = new SerializingService<>();
+        // List available files ending with Survey file extension.
         List<String> files = serializingService.availableFiles(this.getFileExtension());
+        // Get user's choice for which file to deserialize.
         int numSelection = this.ioService.getChoiceFromUser(files);
+        // Deserialize it.
         Survey loadedSurvey = serializingService.deserialize(files.get(numSelection));
+        // Add it to our loaded surveys.
         this.loadedSurveys.add(loadedSurvey);
     }
 
     public void doSave() throws IOException {
+        // Prompt user to select a survey to serialize.
         Survey surveyToSave = getUserSelectedSurvey();
+        // Create service to serialize.
         SerializingService<Survey> serializingService = new SerializingService<>();
+        // Create a filename and serialize object using that name.
         String fileName = surveyToSave.getSurveyName() + this.getFileExtension();
         serializingService.serialize(fileName, surveyToSave);
     }
 
-    public void doTabulate(){
-
+    public void doTabulate() {
+        /**
+         * Todo, next homework.
+         */
     }
 
     protected Survey getUserSelectedSurvey(){
         if (this.loadedSurveys.isEmpty()){
             throw new RuntimeException("There are no surveys loaded!");
         }
+        // Prompt user to select a survey from those that have been loaded.
         return this.loadedSurveys.get(ioService.getChoiceFromUser(loadedSurveys));
     }
 

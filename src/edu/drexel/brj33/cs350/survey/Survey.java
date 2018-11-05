@@ -25,7 +25,12 @@ public class Survey implements Serializable {
         this.setSurveyName(surveyName);
 
         Menu m = new Menu(this);
-        // Use Lambda expressions, which will be treated as a MenuAction type.
+
+        /*
+         * Use Lambda expressions, which will be treated as a MenuAction type.
+         * These Lambda expressions will be called when the corresponding menu
+         * option is selected.
+         */
         m.addMenuOptionAction("Add a new T/F question", ()->{
             addQuestion(new TrueFalseQuestion(), ioService);
         });
@@ -56,8 +61,11 @@ public class Survey implements Serializable {
     }
 
     public void display(IOService ioService) {
-        for (Question q : this.questions){
-            q.display(ioService);
+        ioService.writeSeparator();
+        for (int i = 0; i < getQuestions().size(); i ++) {
+            ioService.writeContent("Question " + (i+1) + " of " + getQuestions().size(), true);
+            getQuestions().get(i).display(ioService);
+            ioService.writeSeparator();
         }
     }
 
@@ -68,7 +76,9 @@ public class Survey implements Serializable {
     }
 
     public void edit(IOService ioService){
-
+        /**
+         * Todo, next homework.
+         */
     }
 
     public void addQuestion(Question q, IOService ioService){

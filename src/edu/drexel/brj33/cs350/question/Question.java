@@ -35,11 +35,13 @@ public abstract class Question implements Serializable {
     }
 
     public void setup(IOService ioService){
+        // When creating a new question, set a new prompt and the number of responses.
         this.getPrompt().setup(ioService);
         this.numResponses = ioService.getNumberFromUser("Enter number of allowed responses.");
     }
 
     public void display(IOService ioService){
+        // Display the prompt of the question.
         this.getPrompt().display(ioService);
     }
 
@@ -54,18 +56,26 @@ public abstract class Question implements Serializable {
     }
 
     public void take(IOService ioService){
+        // Method is called whenever a user is answering a question.
+        // Display the question.
         this.display(ioService);
+        // While we don't have the expected number of responses...
         while(this.responses.size() < this.getNumberResponses()){
             try {
+                // Get a response.
                 String userInputResponse = ioService.getStringFromUser(null);
+                // Submit the response.
                 this.submitResponse(new Response(userInputResponse));
             } catch (Exception e) {
+                // Display an appropriate error message.
                 ioService.writeContent(e.getMessage());
             }
         }
     }
 
     public void edit(IOService ioService){
-
+        /**
+         * TODO, next homework.
+         */
     }
 }

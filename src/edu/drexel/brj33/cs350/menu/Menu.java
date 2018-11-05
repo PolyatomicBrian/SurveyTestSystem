@@ -20,26 +20,34 @@ public class Menu {
     private Object service;
 
     public Menu(Object service){
-        this.service = service;
+        this.service = service; // Type of service, either Survey or Test.
         this.optionMethods = new ArrayList<>();
         this.optionValues = new ArrayList<>();
         this.optionActions = new ArrayList<>();
     }
 
-    // Uses Reflection.
+    /**
+     * Uses Reflection and calls a predefined Java method when the corresponding
+     * Menu option is selected.
+     */
     public void addMenuOptionValue(String optionValue, String optionMethod){
-        this.optionMethods.add(optionMethod);
-        this.optionValues.add(optionValue);
-        this.optionActions.add(null);
+        this.optionMethods.add(optionMethod); // Java method name being used.
+        this.optionValues.add(optionValue);   // Menu description.
+        this.optionActions.add(null);         // Lambda expression not being used.
     }
 
-    // Uses Lambda functions.
+    /**
+     * Uses Lambda expressions to perform an action corresponding to a Menu option.
+     */
     public void addMenuOptionAction(String optionValue, MenuAction optionAction){
-        this.optionValues.add(optionValue);
-        this.optionActions.add(optionAction);
-        this.optionMethods.add(null);
+        this.optionValues.add(optionValue);   // Menu description.
+        this.optionActions.add(optionAction); // Lambda expression being used.
+        this.optionMethods.add(null);         // Java method not being used.
     }
 
+    /**
+     * Displays this menu, and performs an action based on the user's input.
+     */
     public void handleMenu(IOService ioService){
         this.addMenuOptionValue("Done", null);
         boolean cont = true;
@@ -63,8 +71,13 @@ public class Menu {
                     cont = false;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                //ioService.writeContent(e.getCause().getMessage());
+                //e.printStackTrace();
+                if (e.getCause() != null && e.getCause().getMessage() != null) {
+                    ioService.writeContent(e.getCause().getMessage());
+                }else{
+                    ioService.writeContent("An unexpected error has occurred.");
+                    ioService.writeContent("Please try again.");
+                }
             }
         }
     }

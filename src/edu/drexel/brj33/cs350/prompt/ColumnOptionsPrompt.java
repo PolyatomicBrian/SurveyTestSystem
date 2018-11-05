@@ -5,6 +5,15 @@ import edu.drexel.brj33.cs350.service.IOService;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A ColumnOptionsPrompt is a prompt that provides options with its prompt, rather than
+ * just displaying a sentence-based question. An example of usage would be in a Multiple
+ * Choice question, where a ColumnOptionsPrompt is used to create one column of options:
+ *    This is the sentence-based prompt, below are my options
+ *       A) First option
+ *       B) Second option
+ *       C) Third option
+ */
 public class ColumnOptionsPrompt extends Prompt {
     private List<List<String>> optionsColumns;
     private int numColumns;
@@ -32,13 +41,30 @@ public class ColumnOptionsPrompt extends Prompt {
         int numOptions = this.optionsColumns.get(0).size();
         for (int i = 0; i < numOptions; i++){
             String line = "";
+            int numLongestOptionChars = getNumLongestOptionChars(optionsColumns.get(0));
+            int numLongestCharsWithPadding = numLongestOptionChars + 10;
             for (int j = 0; j < this.numColumns; j++){
-                // Add options of row i together, separated by a tab.
-                line += this.optionsColumns.get(j).get(i) + "\t";
+                /* Formatting with "%1$-" will add padding to the right of
+                 * our string this.optionsColumns.get(j).get(i). */
+                line += getOptionCharacterLabel(i, j) + String.format("%1$-" +
+                        numLongestCharsWithPadding + "s",
+                        this.optionsColumns.get(j).get(i));
             }
             // Output String containing options of row i.
-            ioService.writeContent(line);
+            ioService.writeIndentedContent(line);
         }
+    }
+
+    private static int getNumLongestOptionChars(List<String> opts) {
+        int n = 0;
+        // Iterate through all options.
+        for (String opt : opts){
+            // If opt is longer than n, set n to opt's length.
+            if (opt.length() > n){
+                n = opt.length();
+            }
+        }
+        return n;
     }
 
     public void setup(IOService ioService){
@@ -56,6 +82,19 @@ public class ColumnOptionsPrompt extends Prompt {
                 // Add user-specified option value to optionsColumns.
                 this.optionsColumns.get(i).add(opt);
             }
+        }
+    }
+
+    private static String getOptionCharacterLabel(int i, int j){
+        // For the second column of matching, use numbers.
+        if (j == 1){
+            return i+1 + ") ";
+        // Otherwise, use letters.
+        }else {
+            // Convert number to a char, where i=0=>A, i=1=>B, etc.
+            char c = (char) (i + 65);
+            String label = c + ") ";
+            return label;
         }
     }
 
