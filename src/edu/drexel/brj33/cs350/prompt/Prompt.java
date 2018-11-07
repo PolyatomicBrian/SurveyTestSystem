@@ -36,8 +36,6 @@ public class Prompt implements Serializable {
     }
 
     public void edit(IOService ioService){
-        /**
-         * TODO, next homework.
-         */
+        this.setup(ioService);
     }
 }

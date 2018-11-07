@@ -1,5 +1,6 @@
 package edu.drexel.brj33.cs350.prompt;
 
+import edu.drexel.brj33.cs350.menu.Menu;
 import edu.drexel.brj33.cs350.service.IOService;
 
 import java.util.ArrayList;
@@ -96,6 +97,47 @@ public class ColumnOptionsPrompt extends Prompt {
             String label = c + ") ";
             return label;
         }
+    }
+
+    public void edit(IOService ioService){
+        Menu m = new Menu(null);
+        // Modifying a prompt?
+        m.addMenuOptionAction("Edit prompt.", ()->{
+            super.setup(ioService);
+        });
+        // Modifying a choice?
+        m.addMenuOptionAction("Edit choices.", ()->{
+            // Create submenu asking for which column to select.
+            Menu colsMenu = new Menu(null);
+            // Iterate through each column, asking the user which column they want to edit.
+            // From the selected column, the user will be asked which choice they want to edit.
+            for(int i = 0; i < numColumns; i++){
+                final int indexCol = i;
+                // Add column to list of those that can be edited.
+                colsMenu.addMenuOptionAction("Column " + (i+1), ()->{
+                    // Create another submenu asking for which choice of selected column to edit.
+                    Menu choicesMenu = new Menu(null);
+                    // Iterate through choices, user can select which they want to edit.
+                    for (int j = 0; j < this.getColumn(indexCol).size(); j++){
+                        final int indexOption = j;
+                        // Get choice from column.
+                        String columnOption = this.optionsColumns.get(indexCol).get(indexOption);
+                        // Give it an Action for when (if) it is selected.
+                        choicesMenu.addMenuOptionAction(columnOption, ()->{
+                            // User will be asked to enter a new value for this choice.
+                            String newOpt = ioService.getStringFromUser("Enter a new choice.");
+                            // Overwrite existing choice with new one.
+                            this.optionsColumns.get(indexCol).set(indexOption, newOpt);
+                        });
+                    }
+                    // Display menu. Don't repeat its display; go back to the previous menu instead.
+                    choicesMenu.handleMenu(ioService, false);
+                });
+            }
+            colsMenu.handleMenu(ioService);
+        });
+        ioService.writeTitle("What do you want to edit?");
+        m.handleMenu(ioService);
     }
 
 }

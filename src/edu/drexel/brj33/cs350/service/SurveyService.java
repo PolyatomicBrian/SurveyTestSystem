@@ -28,7 +28,7 @@ public class SurveyService {
          * Todo, commented values will be implemented in next homework.
          */
         //m.addMenuOptionValue("Take", "doTake");
-        //m.addMenuOptionValue("Edit", "doEdit");
+        m.addMenuOptionValue("Edit", "doEdit");
         m.addMenuOptionValue("Display", "doDisplay");
         m.addMenuOptionValue("Load", "doLoad");
         m.addMenuOptionValue("Save", "doSave");
@@ -51,9 +51,7 @@ public class SurveyService {
     }
 
     public void doEdit(){
-        /**
-         * Todo, next homework.
-         */
+        this.getUserSelectedSurvey().edit(ioService);
     }
 
     public void doDisplay(){

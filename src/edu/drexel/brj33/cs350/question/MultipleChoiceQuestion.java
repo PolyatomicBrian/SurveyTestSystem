@@ -30,7 +30,7 @@ public class MultipleChoiceQuestion extends Question {
     }
 
     @Override
-    protected Prompt getPrompt() {
+    public Prompt getPrompt() {
         return this.prompt;
     }
 
@@ -43,5 +43,10 @@ public class MultipleChoiceQuestion extends Question {
         s = s.toUpperCase();
         int index = s.charAt(0) - 65;
         return index;
+    }
+
+    @Override
+    public String getQuestionTypeDisplayName() {
+        return "Multiple Choice Question";
     }
 }

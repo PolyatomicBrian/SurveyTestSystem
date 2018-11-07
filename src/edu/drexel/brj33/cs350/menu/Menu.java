@@ -45,13 +45,20 @@ public class Menu {
         this.optionMethods.add(null);         // Java method not being used.
     }
 
+    public void handleMenu(IOService ioService){
+        handleMenu(ioService, true);
+    }
+
     /**
      * Displays this menu, and performs an action based on the user's input.
      */
-    public void handleMenu(IOService ioService){
+    public void handleMenu(IOService ioService, boolean repeat){
         this.addMenuOptionValue("Done", null);
         boolean cont = true;
         while (cont) {
+            if (!repeat){
+                cont = false;
+            }
             // Get index corresponding to a value displayed.
             // This will be used as an index for getting the associated method.
             int userChoice = ioService.getChoiceFromUser(optionValues);

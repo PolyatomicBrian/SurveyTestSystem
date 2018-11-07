@@ -26,7 +26,12 @@ public class ShortAnswerQuestion extends Question {
     }
 
     @Override
-    protected Prompt getPrompt() {
+    public Prompt getPrompt() {
         return this.prompt;
+    }
+
+    @Override
+    public String getQuestionTypeDisplayName() {
+        return "Short Answer Question";
     }
 }

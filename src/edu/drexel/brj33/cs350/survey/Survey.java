@@ -76,9 +76,17 @@ public class Survey implements Serializable {
     }
 
     public void edit(IOService ioService){
-        /**
-         * Todo, next homework.
-         */
+        List<String> availableQuestions = new ArrayList<>();
+        for (int i = 0; i < this.questions.size(); i++){
+            Question q = this.questions.get(i);
+            String displayString = "Question " + (i+1);
+            displayString += " (" + q.getQuestionTypeDisplayName() + "): ";
+            displayString += q.getPrompt().getPromptText();
+            availableQuestions.add(displayString);
+        }
+        ioService.writeContent("Select question to edit.");
+        int selected_index = ioService.getChoiceFromUser(availableQuestions);
+        this.questions.get(selected_index).edit(ioService);
     }
 
     public void addQuestion(Question q, IOService ioService){

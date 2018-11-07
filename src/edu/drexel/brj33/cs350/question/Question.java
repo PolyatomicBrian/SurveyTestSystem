@@ -49,7 +49,9 @@ public abstract class Question implements Serializable {
 
     protected abstract Response formatResponse(Response resp);
 
-    protected abstract Prompt getPrompt();
+    public abstract Prompt getPrompt();
+
+    public abstract String getQuestionTypeDisplayName();
 
     protected int getNumberResponses(){
         return this.numResponses;
@@ -74,8 +76,6 @@ public abstract class Question implements Serializable {
     }
 
     public void edit(IOService ioService){
-        /**
-         * TODO, next homework.
-         */
+        this.getPrompt().edit(ioService);
     }
 }
