@@ -27,6 +27,9 @@ public class MultipleChoiceQuestion extends Question {
     @Override
     protected void validateResponse(Response resp) throws Exception {
         // Ensures the selected option is actually a listed option.
+        if (resp.getResponse().length() != 1){
+            throw new Exception("Selection not listed.");
+        }
         // Also checks that the selected option is at least 0.
         boolean contains = this.prompt.getColumn(0).size() > strToResponseIndex(resp.getResponse()) &&
                            strToResponseIndex(resp.getResponse()) >= 0;
