@@ -1,6 +1,7 @@
 package edu.drexel.brj33.cs350.response;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Response implements Serializable {
 
@@ -26,6 +27,21 @@ public class Response implements Serializable {
         }else{
             return false;
         }
+    }
+
+    /**
+     * Overridden so every Response object is different based on their string.
+     * This way, we can put different Responses into our set (since sets do not
+     * allow for duplicates). Without this method, only one Response-typed object
+     * could be stored in the set, and everything else would be considered a duplicate.
+     * HashSets check the hashcode of each object to determine what is unique.
+     *
+     * @return a unique ID pertaining to the specific Response object, generated
+     *         based on their response string.
+     */
+    @Override
+    public int hashCode(){
+        return Objects.hash(this.toString());
     }
 
     public String toString(){

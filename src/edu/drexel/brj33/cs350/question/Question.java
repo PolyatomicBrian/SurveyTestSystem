@@ -13,7 +13,7 @@ public abstract class Question implements Serializable {
     // Using a Set to prevent duplicates and allow for unordered elements.
     protected Set<Response> responses;
 
-    private int numResponses = 1;
+    protected int numResponses = 1;
 
     public Question(){
         this.responses = new HashSet<Response>();

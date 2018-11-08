@@ -32,6 +32,10 @@ public class ColumnOptionsPrompt extends Prompt {
         return numColumns;
     }
 
+    public int getNumOptions(){
+        return optionsColumns.get(0).size();
+    }
+
     public List<String> getColumn(int i){
         return optionsColumns.get(i);
     }

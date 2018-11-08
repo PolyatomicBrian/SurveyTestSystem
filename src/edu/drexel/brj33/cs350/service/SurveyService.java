@@ -9,6 +9,8 @@ import java.util.List;
 
 public class SurveyService {
 
+    private String responseFileExtension = ".resp";
+
     protected IOService ioService;
     protected List<Survey> loadedSurveys;
 
@@ -27,7 +29,7 @@ public class SurveyService {
         /**
          * Todo, commented values will be implemented in next homework.
          */
-        //m.addMenuOptionValue("Take", "doTake");
+        m.addMenuOptionValue("Take", "doTake");
         m.addMenuOptionValue("Edit", "doEdit");
         m.addMenuOptionValue("Display", "doDisplay");
         m.addMenuOptionValue("Load", "doLoad");
@@ -46,8 +48,12 @@ public class SurveyService {
         this.loadedSurveys.add(survey);
     }
 
-    public void doTake(){
-        this.getUserSelectedSurvey().take(ioService);
+    public void doTake() throws Exception {
+        Survey s = this.getUserSelectedSurvey();
+        s.take(ioService);
+        this.save(s, "." +
+                ioService.getStringFromUser("[Saving Answers] Enter your last name.")
+                + responseFileExtension);
     }
 
     public void doEdit(){
@@ -73,11 +79,19 @@ public class SurveyService {
 
     public void doSave() throws IOException {
         // Prompt user to select a survey to serialize.
-        Survey surveyToSave = getUserSelectedSurvey();
+        this.save(getUserSelectedSurvey(), "");
+    }
+
+    public void save(Survey surveyToSave, String filepostfix) throws IOException {
         // Create service to serialize.
         SerializingService<Survey> serializingService = new SerializingService<>();
         // Create a filename and serialize object using that name.
-        String fileName = surveyToSave.getSurveyName() + this.getFileExtension();
+        String fileName;
+        if (!filepostfix.isEmpty()) {
+            fileName = surveyToSave.getSurveyName() + this.getFileExtension() + filepostfix;
+        }else{
+            fileName = surveyToSave.getSurveyName() + this.getFileExtension();
+        }
         serializingService.serialize(fileName, surveyToSave);
     }
 
