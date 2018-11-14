@@ -18,12 +18,15 @@ public class Response implements Serializable {
     /**
      * Used to compare a Response to another Response.
      * Specifically, will be used to compare a correct answer to a user's response.
+     * This needed to be overridden because getNode() (which is used by containsKey, which
+     * is used by contains, which is used by containsAll) uses equals(). We need this
+     * equals() to work with our Responses.
      */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Response) {
             Response respObj = (Response) obj;
-            return this.resp.equals(respObj.resp);
+            return this.resp.equalsIgnoreCase(respObj.resp);
         }else{
             return false;
         }
@@ -41,7 +44,7 @@ public class Response implements Serializable {
      */
     @Override
     public int hashCode(){
-        return Objects.hash(this.toString());
+        return Objects.hash(this.toString().toLowerCase());
     }
 
     public String toString(){

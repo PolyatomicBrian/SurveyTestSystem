@@ -73,6 +73,17 @@ public class Test extends Survey {
     }
 
     public void grade(IOService ioService){
-
+        for (int i = 0; i < this.getQuestions().size(); i++){
+            Question q = this.getQuestions().get(i);
+            Set<Response> qResp = q.getResponses();
+            Set<Response> correctAns = this.correctAnswers.get(i);
+            if (correctAns.containsAll(qResp)){
+                ioService.writeContent("You got one right!");
+            }else{
+                ioService.writeContent("You got one wrong, buddy :(");
+            }
+            ioService.writeContent("Correct = " + correctAns.toString());
+            ioService.writeContent("You said = " + qResp.toString());
+        }
     }
 }

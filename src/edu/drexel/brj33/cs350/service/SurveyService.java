@@ -1,6 +1,7 @@
 package edu.drexel.brj33.cs350.service;
 
 import edu.drexel.brj33.cs350.menu.Menu;
+import edu.drexel.brj33.cs350.question.Question;
 import edu.drexel.brj33.cs350.survey.Survey;
 
 import java.io.IOException;
@@ -54,6 +55,10 @@ public class SurveyService {
         this.save(s, "." +
                 ioService.getStringFromUser("[Saving Answers] Enter your last name.")
                 + responseFileExtension);
+        // Clear responses so user can take the survey again.
+        for (Question q : s.getQuestions()){
+            q.clearResponses();
+        }
     }
 
     public void doEdit(){

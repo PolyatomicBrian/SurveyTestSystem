@@ -22,6 +22,12 @@ public class Survey implements Serializable {
 
     public void setup(IOService ioService){
         String surveyName = ioService.getStringFromUser("Enter a name:");
+        // Make sure surveyName does not have a period. This would interfere with
+        // how we parse files later on.
+        while (surveyName.contains(".")) {
+            ioService.writeContent("Names cannot contain periods \".\"!");
+            surveyName = ioService.getStringFromUser("Enter a name:");
+        }
         this.setSurveyName(surveyName);
 
         Menu m = new Menu(this);
