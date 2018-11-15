@@ -5,6 +5,7 @@ import edu.drexel.brj33.cs350.prompt.Prompt;
 import edu.drexel.brj33.cs350.response.Response;
 import edu.drexel.brj33.cs350.service.IOService;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -73,8 +74,14 @@ public class MatchingQuestion extends Question {
 
     @Override
     protected Response formatResponse(Response resp) {
-        // Matching Questions do not need to be formatted to adhere to how we display content.
-        return resp;
+        // Sort matching responses.
+        // eg [b2 c1 a3] becomes [a3 b2 c1].
+        // This makes it easier for us to compare correct answers.
+        String s = resp.getResponse();
+        String[] spaceDelimited = s.split(" ");
+        Arrays.sort(spaceDelimited);
+        String ret = String.join(" ", spaceDelimited);
+        return new Response(ret);
     }
 
     @Override

@@ -5,6 +5,7 @@ import edu.drexel.brj33.cs350.response.Response;
 import edu.drexel.brj33.cs350.survey.Survey;
 import edu.drexel.brj33.cs350.survey.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestService extends SurveyService {
@@ -27,14 +28,16 @@ public class TestService extends SurveyService {
 
     public void doGrade() throws Exception {
         SerializingService<Test> ss = new SerializingService<>();
-        List<String> listFiles = ss.availableFiles(".resp");
-        for (String f : listFiles){
+        List<String> availableFiles = ss.availableFiles(".resp");
+        List<String> listFiles = new ArrayList<>();
+        for (String f : availableFiles){
             // Split filename based on periods.
             String[] splitF = f.split("\\.");
-            // If this file isn't named *.test.*.resp then we won't want to list it,
-            // so remove it from our list.
-            if (splitF.length != 4 || !splitF[1].equals("test")){
-                listFiles.remove(f);
+            // If this file is named *.test.*.resp then it's (probably) valid, so add it to our list.
+            //   The reason it would not be valid is if the user tried to create their own *.test.*.resp file,
+            //   which is out of scope for this program.
+            if (splitF.length == 4 && splitF[1].equals("test")){
+                listFiles.add(f);
             }
         }
         // Have user select a completed test to grade.

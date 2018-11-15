@@ -30,8 +30,6 @@ public class TrueFalseQuestion extends Question {
         List<String> validResponses = new ArrayList<String>();
         validResponses.add("T");
         validResponses.add("F");
-        validResponses.add("TRUE");
-        validResponses.add("FALSE");
         // Make sure they enter some variant of True / False.
         if (!validResponses.contains(resp.getResponse().toUpperCase())){
             throw new Exception("Invalid response. Must be T or F.");

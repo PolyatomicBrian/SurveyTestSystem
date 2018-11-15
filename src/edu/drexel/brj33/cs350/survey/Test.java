@@ -1,6 +1,7 @@
 package edu.drexel.brj33.cs350.survey;
 
 import edu.drexel.brj33.cs350.menu.Menu;
+import edu.drexel.brj33.cs350.question.EssayQuestion;
 import edu.drexel.brj33.cs350.question.Question;
 import edu.drexel.brj33.cs350.response.Response;
 import edu.drexel.brj33.cs350.service.IOService;
@@ -19,14 +20,20 @@ public class Test extends Survey {
 
     public void addQuestion(Question q, IOService ioService){
         super.addQuestion(q, ioService);
-        ioService.writeTitle("Enter the correct answer for this question.");
-        // Have admin "take" the question by adding a correct answer.
-        // This allows admin to verify their correct answer is a valid response
-        // for that question type.
-        q.take(ioService);
-        this.correctAnswers.add(q.getResponses());
-        // Clear admin's answer from question's responses.
-        q.clearResponses();
+        if (!(q instanceof EssayQuestion)) {
+            ioService.writeTitle("Enter the correct answer for this question.");
+            // Have admin "take" the question by adding a correct answer.
+            // This allows admin to verify their correct answer is a valid response
+            // for that question type.
+            q.take(ioService);
+            this.correctAnswers.add(q.getResponses());
+            // Clear admin's answer from question's responses.
+            q.clearResponses();
+        }else{
+            // Essay questions don't have correct answers, so add "null" instead.
+            // Having a null value as a correct answer will make grading easier.
+            this.correctAnswers.add(null);
+        }
     }
 
     public void display(IOService ioService){
@@ -34,7 +41,9 @@ public class Test extends Survey {
         for (int i = 0; i < getQuestions().size(); i ++) {
             ioService.writeContent("Question " + (i+1) + " of " + getQuestions().size(), true);
             getQuestions().get(i).display(ioService);
-            ioService.writeContent("Correct Answer: " + correctAnswers.get(i).toString());
+            if (correctAnswers.get(i) != null) {
+                ioService.writeContent("Correct Answer: " + correctAnswers.get(i).toString());
+            }
             ioService.writeSeparator();
         }
     }
@@ -73,17 +82,28 @@ public class Test extends Survey {
     }
 
     public void grade(IOService ioService){
+        int tallyCorrect = 0;
+        int totalGradedQuestions = 0;
         for (int i = 0; i < this.getQuestions().size(); i++){
             Question q = this.getQuestions().get(i);
             Set<Response> qResp = q.getResponses();
             Set<Response> correctAns = this.correctAnswers.get(i);
-            if (correctAns.containsAll(qResp)){
-                ioService.writeContent("You got one right!");
-            }else{
-                ioService.writeContent("You got one wrong, buddy :(");
+            // Essay Questions have null correctAns, since essay questions don't have any correct answers.
+            if (correctAns != null) {
+                totalGradedQuestions++;
+                ioService.writeTitle("Question " + (i+1) + ": " + q.getPrompt().getPromptText());
+                ioService.writeSeparator();
+                if (correctAns.containsAll(qResp)) {
+                    ioService.writeContent("You got this right!");
+                    tallyCorrect++;
+                } else {
+                    ioService.writeContent("You got this wrong.");
+                }
+                ioService.writeIndentedContent("Correct = " + correctAns.toString());
+                ioService.writeIndentedContent("You said = " + qResp.toString());
             }
-            ioService.writeContent("Correct = " + correctAns.toString());
-            ioService.writeContent("You said = " + qResp.toString());
         }
+        ioService.writeContent("You scored " + tallyCorrect*10 + "/" + totalGradedQuestions*10 + "!");
+        ioService.writeSeparator();
     }
 }

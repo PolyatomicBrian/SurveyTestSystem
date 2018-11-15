@@ -16,6 +16,7 @@ public class SerializingService <T>{
         FileOutputStream fo = new FileOutputStream(fileName);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fo);
         objectOutputStream.writeObject(object);
+        objectOutputStream.close();
     }
 
     public List<String> availableFiles(String fileExtension){
@@ -37,6 +38,8 @@ public class SerializingService <T>{
         // "T" type is used to read generic object, such as Test or Survey.
         FileInputStream fi = new FileInputStream(fileName);
         ObjectInputStream objectInputStream = new ObjectInputStream(fi);
-        return (T) objectInputStream.readObject();
+        T ret = (T) objectInputStream.readObject();
+        objectInputStream.close();
+        return ret;
     }
 }

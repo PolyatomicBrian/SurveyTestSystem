@@ -2,11 +2,15 @@ package edu.drexel.brj33.cs350.service;
 
 import edu.drexel.brj33.cs350.menu.Menu;
 import edu.drexel.brj33.cs350.question.Question;
+import edu.drexel.brj33.cs350.response.Response;
 import edu.drexel.brj33.cs350.survey.Survey;
+import edu.drexel.brj33.cs350.survey.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SurveyService {
 
@@ -27,15 +31,12 @@ public class SurveyService {
     protected Menu getMenu() {
         Menu m = new Menu(this);
         m.addMenuOptionValue("Create", "doCreate");
-        /**
-         * Todo, commented values will be implemented in next homework.
-         */
         m.addMenuOptionValue("Take", "doTake");
         m.addMenuOptionValue("Edit", "doEdit");
         m.addMenuOptionValue("Display", "doDisplay");
         m.addMenuOptionValue("Load", "doLoad");
         m.addMenuOptionValue("Save", "doSave");
-        //m.addMenuOptionValue("Tabulate", "doTabulate");
+        m.addMenuOptionValue("Tabulate", "doTabulate");
         return m;
     }
 
@@ -100,10 +101,73 @@ public class SurveyService {
         serializingService.serialize(fileName, surveyToSave);
     }
 
-    public void doTabulate() {
-        /**
-         * Todo, next homework.
-         */
+    public void doTabulate() throws Exception {
+        SerializingService<Survey> ss = new SerializingService<>();
+        List<String> listFiles = ss.availableFiles(".resp");
+        /* Create map to keep count of the number of responses per survey.
+           The key String will be the Survey's filename.
+           The value List<Survey> will be responses for that Survey.*/
+        Map<String,List<Survey>> availableResponses = getAvailableResponses(listFiles, ss);
+        // Create list containing all the Surveys, using the keys of our map.
+        List<String> listSurveys = new ArrayList<String>(availableResponses.keySet());
+        int indexOfSurvey = ioService.getChoiceFromUser(listSurveys);
+        // Get list of all the surveys we need to tabulate from our map.
+        List<Survey> surveysToTabulate = availableResponses.get(listSurveys.get(indexOfSurvey));
+        Map<Integer,Map<Response,Integer>> mapQuestionsWithResponses = new HashMap<>();
+        for (Survey s : surveysToTabulate){
+            for (int i = 0; i < s.getQuestions().size(); i++) {
+                Question q = s.getQuestions().get(i);
+                if (!mapQuestionsWithResponses.containsKey(i)){
+                    mapQuestionsWithResponses.put(i, new HashMap<>());
+                }
+                for (Response r : q.getResponses()){
+                    Map<Response,Integer> responsesWithCounts = mapQuestionsWithResponses.get(i);
+                    if (responsesWithCounts.containsKey(r)){
+                        int count = responsesWithCounts.get(r);
+                        count++;
+                        responsesWithCounts.put(r, count);
+                    }else{
+                        responsesWithCounts.put(r, 1);
+                    }
+                }
+            }
+        }
+        ioService.writeSeparator();
+        for (int i = 0; i < surveysToTabulate.get(0).getQuestions().size(); i++){
+            ioService.writeTitle(surveysToTabulate.get(0).getQuestions().get(i).getPrompt().getPromptText());
+            for (Map.Entry<Response,Integer> e : mapQuestionsWithResponses.get(i).entrySet()){
+                ioService.writeIndentedContent(e.getKey() + ": " + e.getValue());
+            }
+            ioService.writeSeparator();
+        }
+    }
+
+    private Map<String, List<Survey>> getAvailableResponses(List<String> listFiles, SerializingService<Survey> ss) throws Exception{
+        Map<String,List<Survey>> availableResponses = new HashMap<>();
+        List<String> availableFiles = new ArrayList<>();
+        for (String f : listFiles){
+            // Split filename based on periods.
+            String[] splitF = f.split("\\.");
+            // Make sure file follows our pattern *.*.*.resp
+            if (splitF.length == 4) {
+                // Get the filename of the Survey that the response was for.
+                String surveyName = splitF[0] + "." + splitF[1];
+                // If survey filename is already in our map, add Survey to our list.
+                if (availableResponses.containsKey(surveyName)){
+                    availableResponses.get(surveyName).add(ss.deserialize(f));
+                }else{
+                    // If survey filename is not in our map, add it, and create an empty list.
+                    availableResponses.put(surveyName, new ArrayList<>());
+                    // Add current survey to map's list.
+                    availableResponses.get(surveyName).add(ss.deserialize(f));
+                }
+                // File adheres to *.*.*.resp, so add it to our list.
+                availableFiles.add(f);
+            }
+        }
+        listFiles.clear();
+        listFiles.addAll(availableFiles);
+        return availableResponses;
     }
 
     protected Survey getUserSelectedSurvey(){
