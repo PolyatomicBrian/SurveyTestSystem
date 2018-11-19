@@ -53,9 +53,14 @@ public class SurveyService {
     public void doTake() throws Exception {
         Survey s = this.getUserSelectedSurvey();
         s.take(ioService);
-        this.save(s, "." +
-                ioService.getStringFromUser("[Saving Answers] Enter your last name.")
-                + responseFileExtension);
+        String userLastName = ioService.getStringFromUser("[Saving Answers] Enter your last name.");
+        // Make sure userLastName does not have a period. This would interfere with
+        // how we parse files later on.
+        while (userLastName.contains(".")) {
+            ioService.writeContent("Names cannot contain periods \".\"!");
+            userLastName = ioService.getStringFromUser("Enter your last name.");
+        }
+        this.save(s, "." + userLastName + responseFileExtension);
         // Clear responses so user can take the survey again.
         for (Question q : s.getQuestions()){
             q.clearResponses();
