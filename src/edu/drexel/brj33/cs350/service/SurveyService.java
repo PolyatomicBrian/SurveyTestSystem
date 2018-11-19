@@ -113,33 +113,46 @@ public class SurveyService {
            The key String will be the Survey's filename.
            The value List<Survey> will be responses for that Survey.*/
         Map<String,List<Survey>> availableResponses = getAvailableResponses(listFiles, ss);
-        // Create list containing all the Surveys, using the keys of our map.
+        // Create list containing all the survey names, using the keys of our map.
         List<String> listSurveys = new ArrayList<String>(availableResponses.keySet());
         int indexOfSurvey = ioService.getChoiceFromUser(listSurveys);
-        // Get list of all the surveys we need to tabulate from our map.
+        // Get list of all the Surveys we need to tabulate from our map.
         List<Survey> surveysToTabulate = availableResponses.get(listSurveys.get(indexOfSurvey));
+        // Create map that will contain a Question Index and an inner map containing a Response
+        //   with the tallied number of responses that specific response got (the tabulation).
         Map<Integer,Map<Response,Integer>> mapQuestionsWithResponses = new HashMap<>();
+        // Iterate through our surveys we plan on tabulating...
         for (Survey s : surveysToTabulate){
+            // Iterate through all the questions that survey has...
             for (int i = 0; i < s.getQuestions().size(); i++) {
                 Question q = s.getQuestions().get(i);
+                // If the map doesn't have this question's index, add its index to the map.
                 if (!mapQuestionsWithResponses.containsKey(i)){
                     mapQuestionsWithResponses.put(i, new HashMap<>());
                 }
+                // Iterate through all responses of that question...
                 for (Response r : q.getResponses()){
+                    // Create inner map.
                     Map<Response,Integer> responsesWithCounts = mapQuestionsWithResponses.get(i);
+                    // If the inner map already has this response...
                     if (responsesWithCounts.containsKey(r)){
+                        // Increment the tally for how many people responded with this.
                         int count = responsesWithCounts.get(r);
                         count++;
                         responsesWithCounts.put(r, count);
                     }else{
+                        // This is the first person who responded with this, so set tally to 1.
                         responsesWithCounts.put(r, 1);
                     }
                 }
             }
         }
+        // Display tabulation:
         ioService.writeSeparator();
         for (int i = 0; i < surveysToTabulate.get(0).getQuestions().size(); i++){
+            // Display question prompt.
             ioService.writeTitle(surveysToTabulate.get(0).getQuestions().get(i).getPrompt().getPromptText());
+            // Display Response with the tally of how many people gave that same response.
             for (Map.Entry<Response,Integer> e : mapQuestionsWithResponses.get(i).entrySet()){
                 ioService.writeIndentedContent(e.getKey() + ": " + e.getValue());
             }
@@ -154,7 +167,7 @@ public class SurveyService {
             // Split filename based on periods.
             String[] splitF = f.split("\\.");
             // Make sure file follows our pattern *.*.*.resp
-            if (splitF.length == 4) {
+            if (splitF.length == 4 && splitF[1].equals(this.getFileExtension().substring(1))) {
                 // Get the filename of the Survey that the response was for.
                 String surveyName = splitF[0] + "." + splitF[1];
                 // If survey filename is already in our map, add Survey to our list.
