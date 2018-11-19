@@ -5,9 +5,7 @@ import edu.drexel.brj33.cs350.prompt.Prompt;
 import edu.drexel.brj33.cs350.response.Response;
 import edu.drexel.brj33.cs350.service.IOService;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class MatchingQuestion extends Question {
 
@@ -74,13 +72,21 @@ public class MatchingQuestion extends Question {
 
     @Override
     protected Response formatResponse(Response resp) {
+        String s = resp.getResponse();
+        String[] spaceDelimited = s.split(" ");
+        // Need to sort each piece in response so letters come before numbers.
+        // eg [1a 2b 3c] becomes [a1 b2 c3].
+        String[] alphaThenNumeric = new String[spaceDelimited.length];
+        for (int i = 0; i < spaceDelimited.length; i++){
+            String[] wordSplitIntoChars = spaceDelimited[i].split("");
+            Arrays.sort(wordSplitIntoChars, Collections.reverseOrder());
+            alphaThenNumeric[i] = wordSplitIntoChars[0] + wordSplitIntoChars[1];
+        }
         // Sort matching responses.
         // eg [b2 c1 a3] becomes [a3 b2 c1].
         // This makes it easier for us to compare correct answers.
-        String s = resp.getResponse();
-        String[] spaceDelimited = s.split(" ");
-        Arrays.sort(spaceDelimited);
-        String ret = String.join(" ", spaceDelimited);
+        Arrays.sort(alphaThenNumeric);
+        String ret = String.join(" ", alphaThenNumeric);
         return new Response(ret);
     }
 
