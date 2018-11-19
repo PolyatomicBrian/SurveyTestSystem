@@ -91,8 +91,8 @@ public class Test extends Survey {
             // Essay Questions have null correctAns, since essay questions don't have any correct answers.
             if (correctAns != null) {
                 totalGradedQuestions++;
-                ioService.writeTitle("Question " + (i+1) + ": " + q.getPrompt().getPromptText());
                 ioService.writeSeparator();
+                ioService.writeTitle("Question " + (i+1) + ": " + q.getPrompt().getPromptText());
                 if (correctAns.containsAll(qResp)) {
                     ioService.writeContent("You got this right!");
                     tallyCorrect++;
@@ -103,6 +103,7 @@ public class Test extends Survey {
                 ioService.writeIndentedContent("You said = " + qResp.toString());
             }
         }
+        ioService.writeSeparator();
         ioService.writeContent("You scored " + tallyCorrect*10 + "/" + totalGradedQuestions*10 + "!");
         ioService.writeSeparator();
     }
